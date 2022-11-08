@@ -11,6 +11,7 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container" id="app">
@@ -30,12 +31,13 @@
           </button>
           <div class="navbar-nav ml-auto">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <form class="d-flex">
+              <form id="searchByQuery" class="d-flex">
                 <input
                   class="form-control me-2"
                   type="search"
                   placeholder="Search"
                   aria-label="Search"
+                  name="name"
                 />
                 <button class="btn btn-outline-success" type="submit">
                   Search
@@ -51,105 +53,124 @@
         </div>
       </div> -->
       <div class="container">
-        <div class="row rows-cols-1 row-cols-md-3 g-3">
-          <div id="all-products" style="display: none"></div>
+        <div class="row rows-cols-1 row-cols-md-3 g-3" id="all-products">
+          <!-- <div id="all-products"></div> -->
         </div>
       </div>
     </div>
   </body>
   <script>
+    // fetch("http://localhost:3001/api/products")
+    //   .then((resp) => resp.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     const html = data
+    //       .map((product) => {
+    //         return `
+    //         <div class="col" id="test-col">
+    //           <div class="card border-dark h-100" style="width: 18rem">
+    //               <img
+    //                 src="${product.url_image}"
+    //                 class="card-img-top img-thumbnail"
+    //                 alt="${product.name}"
+    //               />
+    //               <div class="card-body">
+    //                 <h5 class="card-title">${product.name}</h5>
+    //                 <p class="card-text">$${product.price}</p>
+    //               </div>
+    //           </div>
+    //         </div>
+    //         `;
+    //       })
+    //       .join("");
+    //     document
+    //       .querySelector("#all-products")
+    //       .insertAdjacentHTML("afterend", html);
+    //   });
+
     fetch("http://localhost:3001/api/products")
       .then((resp) => resp.json())
       .then((data) => {
         console.log(data);
-        const html = data
-          .map((product) => {
-            return `
-            <div class="col">
-              <div class="card">
-                <div class="row no-gutters">
-                  <div class="col-4">
-                    <img
-                      src="${product.url_image}"
-                      class="card-img"
-                      alt="${product.name}"
-                      height="130"
-                    />
+        data.map((product) => {
+          document.getElementById("all-products").innerHTML += `
+            <div class="col" id="test-col">
+              <div class="card border-dark h-100" style="width: 18rem">
+                  <img
+                    src="${product.url_image}"
+                    class="card-img-top img-thumbnail"
+                    alt="${product.name}"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <p class="card-text">$${product.price}</p>
                   </div>
-                  <div class="col-8">
-                    <div class="card-body">
-                      <div class="card-title">${product.name}</div>
-                      <p class="card-text">$${product.price}</p>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
             `;
-          })
-          .join("");
-        document
-          .querySelector("#all-products")
-          .insertAdjacentHTML("afterend", html);
+        });
       });
+
+    // formulario
+    let form = document.querySelector("#searchByQuery");
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      console.log(form.querySelector('input[name="name"]'));
+      const formData = new FormData(form);
+      console.log(formData.get("name"));
+      const dataName = formData.get("name");
+
+      // fetch(`http://localhost:3001/api/products?name=${dataName}`)
+      //   .then((resp) => resp.json())
+      //   .then((data) => {
+      //     console.log(data);
+      //     const html = data
+      //       .map((product) => {
+      //         return `
+      //       <div class="col">
+      //         <div class="card border-dark h-100" style="width: 18rem">
+      //             <img
+      //               src="${product.url_image}"
+      //               class="card-img-top img-thumbnail"
+      //               alt="${product.name}"
+      //             />
+      //             <div class="card-body">
+      //               <h5 class="card-title">${product.name}</h5>
+      //               <p class="card-text">$${product.price}</p>
+      //             </div>
+      //         </div>
+      //       </div>
+      //       `;
+      //       })
+      //       .join("");
+      //     document
+      //       .querySelector("#all-products")
+      //       .insertAdjacentHTML("afterend", html);
+      //   });
+      fetch(`http://localhost:3001/api/products?name=${dataName}`)
+        .then((resp) => resp.json())
+        .then((data) => {
+          console.log(data);
+          let searchProducts = "";
+          data.map((product) => {
+            searchProducts += `
+          <div class="col" id="test-col">
+              <div class="card border-dark h-100" style="width: 18rem">
+                  <img
+                    src="${product.url_image}"
+                    class="card-img-top img-thumbnail"
+                    alt="${product.name}"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <p class="card-text">$${product.price}</p>
+                  </div>
+              </div>
+            </div>
+          `;
+          });
+          document.getElementById("all-products").innerHTML = searchProducts;
+        });
+    });
   </script>
 </html>
-
-<!-- <div class="container">
-  <div className="row rows-cols-1 row-cols-md-3 g-3">
-    <div class="col">
-      <div class="card" style="width: 18rem">
-        <div class="row no-gutters">
-          <div class="col-4">
-            <img
-              src="${product.url_image}"
-              className="card-img"
-              alt="${product.name}"
-              width="200px"
-              height="200px"
-            />
-          </div>
-          <div class="col-8">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-<!-- <img src=${product.url_image} width="200" height="200">   -->
-<!-- <div></div> -->
-
-<!-- <div class="container">
-  <div className="row rows-cols-1 row-cols-md-3 g-3">
-    <div class="col">
-      <div class="card">
-        <div class="row no-gutters">
-          <div className="col-4">
-            <img
-              src="${product.url_image}"
-              className="card-img"
-              alt="${product.name}"
-              width="200px"
-              height="200px"
-            />
-          </div>
-          <div className="col-8">
-            <div className="card-body">
-              <p class="card-text fw-bold">${product.name}</p>
-              <p class="card-text fw-bold">${product.price}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->

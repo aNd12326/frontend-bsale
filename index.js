@@ -1,37 +1,11 @@
-// fetch("http://localhost:3001/api/products")
-//   .then((resp) => resp.json())
-//   .then((data) => {
-//     console.log(data);
-//     const html = data
-//       .map((product) => {
-//         return `
-//         <div class="col" id="test-col">
-//           <div class="card border-dark h-100" style="width: 18rem">
-//               <img
-//                 src="${product.url_image}"
-//                 class="card-img-top img-thumbnail"
-//                 alt="${product.name}"
-//               />
-//               <div class="card-body">
-//                 <h5 class="card-title">${product.name}</h5>
-//                 <p class="card-text">$${product.price}</p>
-//               </div>
-//           </div>
-//         </div>
-//         `;
-//       })
-//       .join("");
-//     document
-//       .querySelector("#all-products")
-//       .insertAdjacentHTML("afterend", html);
-//   });
-
-fetch("http://localhost:3001/api/products")
-  .then((resp) => resp.json())
-  .then((data) => {
-    console.log(data);
-    data.map((product) => {
-      document.getElementById("all-products").innerHTML += `
+const getAllProducts = () => {
+  fetch("http://localhost:3001/api/products")
+    .then((resp) => resp.json())
+    .then((data) => {
+      console.log(data);
+      localStorage.setItem("products", JSON.stringify(data));
+      data.map((product) => {
+        document.getElementById("all-products").innerHTML += `
             <div class="col" id="test-col">
               <div class="card border-dark h-100" style="width: 18rem">
                   <img
@@ -46,8 +20,10 @@ fetch("http://localhost:3001/api/products")
               </div>
             </div>
             `;
+      });
     });
-  });
+};
+getAllProducts();
 
 // formulario
 let form = document.querySelector("#searchByQuery");
@@ -58,33 +34,6 @@ form.addEventListener("submit", (e) => {
   console.log(formData.get("name"));
   const dataName = formData.get("name");
 
-  // fetch(`http://localhost:3001/api/products?name=${dataName}`)
-  //   .then((resp) => resp.json())
-  //   .then((data) => {
-  //     console.log(data);
-  //     const html = data
-  //       .map((product) => {
-  //         return `
-  //       <div class="col">
-  //         <div class="card border-dark h-100" style="width: 18rem">
-  //             <img
-  //               src="${product.url_image}"
-  //               class="card-img-top img-thumbnail"
-  //               alt="${product.name}"
-  //             />
-  //             <div class="card-body">
-  //               <h5 class="card-title">${product.name}</h5>
-  //               <p class="card-text">$${product.price}</p>
-  //             </div>
-  //         </div>
-  //       </div>
-  //       `;
-  //       })
-  //       .join("");
-  //     document
-  //       .querySelector("#all-products")
-  //       .insertAdjacentHTML("afterend", html);
-  //   });
   fetch(`http://localhost:3001/api/products?name=${dataName}`)
     .then((resp) => resp.json())
     .then((data) => {
@@ -112,20 +61,53 @@ form.addEventListener("submit", (e) => {
 });
 
 // filterByCategory;
-// const filterByCategory = () => {
-//   fetch("http://localhost:3001/api/products")
-//     .then((response) => response.json())
-//     .then((data) => console.log(data));
-// };
-
-const anchors1 = document.getElementById("first");
-anchors1.onclick = function () {
-  fetch("http://localhost:3001/api/categories/1")
+const filterCategoryNames = () => {
+  fetch("http://localhost:3001/api/categories")
     .then((response) => response.json())
     .then((data) => {
-      let searchProducts = "";
-      data.map((product) => {
-        searchProducts += `
+      let categoryNames = "";
+      data.map((category) => {
+        categoryNames += `
+        <li class="nav-item p-1">
+          <button class="btn btn-outline-dark" id=${category.id} onclick="filterByCategory(${category.id})">${category.name}</button>
+        </li>
+        `;
+      });
+      document.getElementById("categories").innerHTML = categoryNames;
+    });
+};
+filterCategoryNames();
+
+const filterByCategory = (number) => {
+  if (typeof number === "string") {
+    console.log(JSON.parse(localStorage.getItem("products")));
+    const allProducts = JSON.parse(localStorage.getItem("products"));
+    let newData = "";
+    allProducts.map((product) => {
+      newData += `
+      <div class="col" id="test-col">
+        <div class="card border-dark h-100" style="width: 18rem">
+            <img
+              src="${product.url_image}"
+              class="card-img-top img-thumbnail"
+              alt="${product.name}"
+            />
+            <div class="card-body">
+              <h5 class="card-title">${product.name}</h5>
+              <p class="card-text">$${product.price}</p>
+            </div>
+        </div>
+      </div>
+      `;
+    });
+    document.getElementById("all-products").innerHTML = newData;
+  } else if (typeof number === "number") {
+    fetch(`http://localhost:3001/api/categories/${number}`)
+      .then((response) => response.json())
+      .then((data) => {
+        let searchProducts = "";
+        data.map((product) => {
+          searchProducts += `
           <div class="col" id="test-col">
               <div class="card border-dark h-100" style="width: 18rem">
                   <img
@@ -140,169 +122,72 @@ anchors1.onclick = function () {
               </div>
             </div>
           `;
+        });
+        document.getElementById("all-products").innerHTML = searchProducts;
       });
-      document.getElementById("all-products").innerHTML = searchProducts;
-    });
+  }
 };
 
-const anchors2 = document.getElementById("second");
-anchors2.onclick = function () {
-  fetch("http://localhost:3001/api/categories/2")
-    .then((response) => response.json())
-    .then((data) => {
-      let searchProducts = "";
-      data.map((product) => {
-        searchProducts += `
-          <div class="col" id="test-col">
-              <div class="card border-dark h-100" style="width: 18rem">
-                  <img
-                    src="${product.url_image}"
-                    class="card-img-top img-thumbnail"
-                    alt="${product.name}"
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">$${product.price}</p>
-                  </div>
-              </div>
-            </div>
-          `;
-      });
-      document.getElementById("all-products").innerHTML = searchProducts;
-    });
-};
+// ------------------------  logic pagination ------------------
 
-const anchors3 = document.getElementById("third");
-anchors3.onclick = function () {
-  fetch("http://localhost:3001/api/categories/3")
-    .then((response) => response.json())
-    .then((data) => {
-      let searchProducts = "";
-      data.map((product) => {
-        searchProducts += `
-          <div class="col" id="test-col">
-              <div class="card border-dark h-100" style="width: 18rem">
-                  <img
-                    src="${product.url_image}"
-                    class="card-img-top img-thumbnail"
-                    alt="${product.name}"
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">$${product.price}</p>
-                  </div>
-              </div>
-            </div>
-          `;
-      });
-      document.getElementById("all-products").innerHTML = searchProducts;
-    });
-};
+// const navPag = document.getElementById("numbers-pagination");
+// const content = document.getElementById("all-products");
 
-const anchors4 = document.getElementById("fourth");
-anchors4.onclick = function () {
-  fetch("http://localhost:3001/api/categories/4")
-    .then((response) => response.json())
-    .then((data) => {
-      let searchProducts = "";
-      data.map((product) => {
-        searchProducts += `
-          <div class="col" id="test-col">
-              <div class="card border-dark h-100" style="width: 18rem">
-                  <img
-                    src="${product.url_image}"
-                    class="card-img-top img-thumbnail"
-                    alt="${product.name}"
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">$${product.price}</p>
-                  </div>
-              </div>
-            </div>
-          `;
-      });
-      document.getElementById("all-products").innerHTML = searchProducts;
-    });
-};
+// let pageIndex = 0;
+// let productsPerPage = 19;
+// let products = JSON.parse(localStorage.getItem("products"));
 
-const anchors5 = document.getElementById("five");
-anchors5.onclick = function () {
-  fetch("http://localhost:3001/api/categories/5")
-    .then((response) => response.json())
-    .then((data) => {
-      let searchProducts = "";
-      data.map((product) => {
-        searchProducts += `
-          <div class="col" id="test-col">
-              <div class="card border-dark h-100" style="width: 18rem">
-                  <img
-                    src="${product.url_image}"
-                    class="card-img-top img-thumbnail"
-                    alt="${product.name}"
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">$${product.price}</p>
-                  </div>
-              </div>
-            </div>
-          `;
-      });
-      document.getElementById("all-products").innerHTML = searchProducts;
-    });
-};
+// function loadProducts() {
+//   content.innerHTML = "";
 
-const anchors6 = document.getElementById("six");
-anchors6.onclick = function () {
-  fetch("http://localhost:3001/api/categories/6")
-    .then((response) => response.json())
-    .then((data) => {
-      let searchProducts = "";
-      data.map((product) => {
-        searchProducts += `
-          <div class="col" id="test-col">
-              <div class="card border-dark h-100" style="width: 18rem">
-                  <img
-                    src="${product.url_image}"
-                    class="card-img-top img-thumbnail"
-                    alt="${product.name}"
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">$${product.price}</p>
-                  </div>
-              </div>
-            </div>
-          `;
-      });
-      document.getElementById("all-products").innerHTML = searchProducts;
-    });
-};
+//   for (
+//     let i = pageIndex * productsPerPage;
+//     i < pageIndex * productsPerPage + productsPerPage;
+//     i++
+//   ) {
+//     const product = document.createElement("div");
+//     product.innerHTML = `
+//       <div>
+//         <img src="${products[i].url_image}" />
+//       </div>
+//     `;
 
-const anchors7 = document.getElementById("seven");
-anchors7.onclick = function () {
-  fetch("http://localhost:3001/api/categories/7")
-    .then((response) => response.json())
-    .then((data) => {
-      let searchProducts = "";
-      data.map((product) => {
-        searchProducts += `
-          <div class="col" id="test-col">
-              <div class="card border-dark h-100" style="width: 18rem">
-                  <img
-                    src="${product.url_image}"
-                    class="card-img-top img-thumbnail"
-                    alt="${product.name}"
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">$${product.price}</p>
-                  </div>
-              </div>
-            </div>
-          `;
-      });
-      document.getElementById("all-products").innerHTML = searchProducts;
-    });
-};
+//     content.append(product);
+//   }
+
+//   loadPageNav();
+// }
+// loadProducts();
+
+// function loadPageNav() {
+//   navPag.innerHTML = "";
+
+//   for (let i = 0; i < products.length / productsPerPage; i++) {
+//     const span = document.createElement("span");
+//     span.innerHTML = i + 1;
+//     span.addEventListener("click", (e) => {
+//       pageIndex = e.target.innerHTML - 1;
+//       loadProducts();
+//     });
+
+//     if (i === pageIndex) {
+//       span.classList = "page-link";
+//     }
+
+//     navPag.append(span);
+//   }
+// }
+
+// let allProducts = JSON.parse(localStorage.getItem("products"));
+// let products = JSON.parse(localStorage.getItem("products")).length;
+
+// const pageNumbers = [];
+// for (let i = 1; i <= Math.ceil(products / productsPerPage); i++) {
+//   pageNumbers.push(i);
+// }
+
+// pageNumbers.map((numbers) => {
+//   document.getElementById("numbers-pagination").innerHTML += `
+//     <li class="page-item"><button class="page-link">${numbers}</button></li>
+//   `;
+// });

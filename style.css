@@ -1,5 +1,11 @@
 img{
     height: 290px !important;
+    object-fit: contain;
+}
+
+.btn-all{
+    height: 38px;
+    margin-top: 4px;
 }
 
 /* .card-body{

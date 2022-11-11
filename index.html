@@ -15,6 +15,7 @@
   </head>
   <body>
     <div class="container-fluid" id="app">
+      <!-- navbar -->
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
           <button
@@ -30,29 +31,16 @@
           </button>
           <a class="navbar-brand" href="#">Bsale</a>
           <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav m-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" id="first">bebida energetica</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="second">pisco</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="third">ron</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="fourth">bebida</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="five">snack</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="six">cerveza</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="seven">vodka</a>
-              </li>
-            </ul>
+            <div class="navbar-nav m-auto mb-2 mb-lg-0">
+              <button
+                class="btn btn-outline-dark btn-all"
+                id="all"
+                onclick="filterByCategory('all-products')"
+              >
+                all
+              </button>
+              <ul class="navbar-nav m-auto mb-2 mb-lg-0" id="categories"></ul>
+            </div>
             <form id="searchByQuery" class="d-flex">
               <input
                 class="form-control me-2"
@@ -68,15 +56,20 @@
           </div>
         </div>
       </nav>
-      <!-- <div class="container">
-        <div class="row row-cols-3">
-          <div id="all-products" style="display: none"></div>
-        </div>
+      <!-- paginado -->
+      <!-- <div class="container d-flex justify-content-center" aria-label="...">
+        <ul class="pagination pagination-sm" id="numbers-pagination">
+          <button class="page-link" id="button">1</button>
+          <li class="page-item active" aria-current="page">
+            <button class="page-link">1</button>
+          </li>
+          <li class="page-item"><button class="page-link">2</button></li>
+          <li class="page-item"><button class="page-link">3</button></li>
+        </ul>
       </div> -->
+      <!-- all products render -->
       <div class="container">
-        <div class="row rows-cols-1 row-cols-md-3 g-3" id="all-products">
-          <!-- <div id="all-products"></div> -->
-        </div>
+        <div class="row rows-cols-1 row-cols-md-3 g-3" id="all-products"></div>
       </div>
     </div>
   </body>

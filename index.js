@@ -15,7 +15,7 @@ productosLista.innerHTML = `
 productosLista = document.querySelector("#all-products");
 
 const getAllProducts = () => {
-  fetch("http://localhost:3001/api/products")
+  fetch(`${url}/api/products`)
     .then((resp) => resp.json())
     .then((data) => {
       console.log(data);
@@ -60,7 +60,7 @@ form.addEventListener("submit", (e) => {
   console.log(formData.get("name"));
   const dataName = formData.get("name");
 
-  fetch(`http://localhost:3001/api/products?name=${dataName}`)
+  fetch(`${url}/api/products?name=${dataName}`)
     .then((resp) => resp.json())
     .then((data) => {
       console.log(data);
@@ -97,7 +97,7 @@ form.addEventListener("submit", (e) => {
 
 // filterByCategory;
 const filterCategoryNames = () => {
-  fetch("http://localhost:3001/api/categories")
+  fetch(`${url}/api/categories`)
     .then((response) => response.json())
     .then((data) => {
       let categoryNames = "";
@@ -138,7 +138,7 @@ const filterByCategory = (number) => {
     });
     document.getElementById("all-products").innerHTML = newData;
   } else if (typeof number === "number") {
-    fetch(`http://localhost:3001/api/categories/${number}`)
+    fetch(`${url}/api/categories/${number}`)
       .then((response) => response.json())
       .then((data) => {
         let searchProducts = "";
@@ -167,7 +167,7 @@ const filterByCategory = (number) => {
 // -------------------------- order products -------------------
 const orders = (typeOrder) => {
   if (typeOrder === "orderAsc") {
-    fetch("http://localhost:3001/api/products/order-asc")
+    fetch(`${url}/api/products/order-asc`)
       .then((response) => response.json())
       .then((data) => {
         let searchProducts = "";
@@ -191,7 +191,7 @@ const orders = (typeOrder) => {
         document.getElementById("all-products").innerHTML = searchProducts;
       });
   } else if (typeOrder === "orderDesc") {
-    fetch("http://localhost:3001/api/products/order-desc")
+    fetch(`${url}/api/products/order-desc`)
       .then((response) => response.json())
       .then((data) => {
         let searchProducts = "";

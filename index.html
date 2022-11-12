@@ -14,10 +14,13 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container-fluid" id="app">
+    <div id="app">
       <!-- navbar -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
+      <nav
+        class="navbar navbar-expand-lg navbar-light"
+        style="background-color: orangered"
+      >
+        <div class="container">
           <button
             class="navbar-toggler"
             type="button"
@@ -29,17 +32,36 @@
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-          <a class="navbar-brand" href="#">Bsale</a>
+          <a class="navbar-brand fw-bold" href="index.html">Bsale</a>
           <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <div class="navbar-nav m-auto mb-2 mb-lg-0">
-              <button
-                class="btn btn-outline-dark btn-all"
+              <!-- <button
+                class="btn btn-warning btn-all"
                 id="all"
                 onclick="filterByCategory('all-products')"
               >
                 all
-              </button>
+              </button> -->
               <ul class="navbar-nav m-auto mb-2 mb-lg-0" id="categories"></ul>
+              <div class="d-flex justify-content-center text-center">
+                <h4>
+                  order By
+                  <button
+                    class="btn btn-warning"
+                    id="orderAsc"
+                    onclick="orders('orderAsc')"
+                  >
+                    asc
+                  </button>
+                  <button
+                    class="btn btn-warning"
+                    id="orderDesc"
+                    onclick="orders('orderDesc')"
+                  >
+                    desc
+                  </button>
+                </h4>
+              </div>
             </div>
             <form id="searchByQuery" class="d-flex">
               <input
@@ -49,9 +71,7 @@
                 aria-label="Search"
                 name="name"
               />
-              <button class="btn btn-outline-success" type="submit">
-                Search
-              </button>
+              <button class="btn btn-warning" type="submit">Search</button>
             </form>
           </div>
         </div>
@@ -68,7 +88,8 @@
         </ul>
       </div> -->
       <!-- all products render -->
-      <div class="container">
+      <div class="container pt-2 pb-2">
+        <div id="spinner"></div>
         <div class="row rows-cols-1 row-cols-md-3 g-3" id="all-products"></div>
       </div>
     </div>

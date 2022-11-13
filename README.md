@@ -8,7 +8,7 @@ Tienda online creada para completar un desafio. La tienda permite buscar product
 
 ## Tecnologias Utilizadas
 
-Para la realizacion de esta tienda virtual se utilizo vanilla js, HTML y CSS, adicionalmente la llamada a la informacion se realiza a traves de la peticion fetch, que trae la informacion del backend conectado a una base de datos en mysql que es otorgado en el desafío.
+Para la realizacion de esta tienda virtual se utilizo vanilla js, HTML,CSS y Bootstrap 5, adicionalmente la llamada a la informacion se realiza a traves de la peticion fetch, que trae la informacion del backend conectado a una base de datos en mysql que es otorgado en el desafío.
 <br/>
 <br/>
 

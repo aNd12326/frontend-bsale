@@ -91,7 +91,6 @@ form.addEventListener("submit", (e) => {
         `;
       }
     });
-  form.querySelector('input[name="name"]').value = "";
 });
 
 // -------------------------------- filter By Category ---------------;
@@ -103,7 +102,7 @@ const filterCategoryNames = () => {
       data.map((category) => {
         categoryNames += `
         <li class="nav-item p-1">
-          <button class="btn btn-warning" id=${category.id} onclick="filterByCategory(${category.id})">${category.name}</button>
+          <button class="btn btn-warning w-100" id=${category.id} onclick="filterByCategory(${category.id})">${category.name}</button>
         </li>
         `;
       });
